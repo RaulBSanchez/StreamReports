@@ -1,10 +1,31 @@
 public class App {
-    public static void main(String[] args) throws Exception {
-       // System.out.println("Hello, World!");
-       Stream wiss = new Stream("Wissahickon", "Philadelphia", "PA");
-       wiss.displayStream();
+    public static void main(String[] args) {
 
-       FishingReport wissFishingReport = new FishingReport("today", 157, 200, "beautiful", "no notes");
-       wissFishingReport.displayFishingReport();
+        Stream wiss = new Stream(
+            "Wissahickon",
+            "Philadelphia",
+            "PA"
+        );
+
+        FishingReport wissFishingReport = new FishingReport(
+            "today",
+            57,
+            200,
+            "clear",
+            "No notes"
+        );
+
+        FishingReport wissFishingReport1 = new FishingReport(
+            "yesterday",
+            57,
+            200,
+            "clear",
+            "No notes"
+        );
+
+        wiss.addReport(wissFishingReport);
+        wiss.addReport(wissFishingReport1);
+
+        wiss.displayStream();
     }
 }

@@ -1,16 +1,30 @@
+import java.util.ArrayList;
+
 public class Stream {
+
     String name;
-    String location;
-    String State;
+    String city;
+    String state;
 
+    ArrayList<FishingReport> reports;
 
-    public Stream(String name, String location, String State){
+    public Stream(String name, String city, String state) {
         this.name = name;
-        this.location = location;
-        this.State = State;
+        this.city = city;
+        this.state = state;
+        this.reports = new ArrayList<>();
     }
 
-    public void displayStream(){
-        System.out.println(name + " " + location +  " " +State);
+    public void addReport(FishingReport report) {
+        reports.add(report);
+    }
+
+    public void displayStream() {
+        System.out.println(name);
+        System.out.println(city + ", " + state);
+
+        for (FishingReport report : reports) {
+            report.displayFishingReport();
+        }
     }
 }
