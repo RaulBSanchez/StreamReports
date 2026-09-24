@@ -27,5 +27,7 @@ public class App {
         wiss.addReport(wissFishingReport1);
 
         wiss.displayStream();
+
+        System.out.println(wiss.getName() + " name");
     }
 }
