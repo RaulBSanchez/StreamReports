@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Stream {
@@ -51,5 +52,28 @@ public class Stream {
         for (FishingReport reporty : reports) {
             reporty.displayFishingReport();
         }
+    }
+
+    public FishingReport getLatesReport(){
+        return reports.get(0);
+    }
+
+    public FishingReport getReportByDate(LocalDate date){
+        for (FishingReport report : reports){
+            if (report.getDate().equals(date)){
+                return report;
+            }
+        }
+
+        return null;
+    }
+
+    public boolean hasReportForDate(LocalDate date){
+        for (FishingReport report: reports){
+            if (report.getDate().equals(date)){
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -1,12 +1,14 @@
+import java.time.LocalDate;
+
 public class FishingReport {
-    String date;
+    private LocalDate date;
     int waterTemperature;
     int waterLevel;
     String waterClarity;
     String notes;
 
     public FishingReport(
-        String date,
+        LocalDate date,
         int waterTemperature,
         int waterLevel,
         String waterClarity,
@@ -19,7 +21,7 @@ public class FishingReport {
         this.notes = notes;
     }
 
-    public String getDate(){
+    public LocalDate getDate(){
         return date;
     }
 
@@ -53,6 +55,10 @@ public class FishingReport {
 
     public void setNotes(String notes){
         this.notes = notes;
+    }
+
+    public LocalDate getdate(){
+        return date;
     }
 
     public void displayFishingReport() {

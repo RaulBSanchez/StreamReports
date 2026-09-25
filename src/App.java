@@ -1,3 +1,5 @@
+import java.time.LocalDate;
+
 public class App {
     public static void main(String[] args) {
 
@@ -8,7 +10,7 @@ public class App {
         );
 
         FishingReport wissFishingReport = new FishingReport(
-            "today",
+            LocalDate.of(2026, 9, 25),
             57,
             200,
             "clear",
@@ -16,7 +18,16 @@ public class App {
         );
 
         FishingReport wissFishingReport1 = new FishingReport(
-            "yesterday",
+            LocalDate.of(2026, 9, 24),
+            57,
+            200,
+            "clear",
+            "No notes"
+        );
+
+
+        FishingReport wissFishingReport3 = new FishingReport(
+            LocalDate.of(2026, 9, 2),
             57,
             200,
             "clear",
@@ -25,9 +36,31 @@ public class App {
 
         wiss.addReport(wissFishingReport);
         wiss.addReport(wissFishingReport1);
+        wiss.addReport(wissFishingReport3);
 
-        wiss.displayStream();
+        
+        if (!wiss.hasReportForDate(wissFishingReport3.getDate())){
+            wiss.addReport(wissFishingReport3);
+            System.out.print("it worked");
 
-        System.out.println(wiss.getName() + " name");
+        }
+        else{
+            System.out.println("didnt work, its already in there");
+        }
+    
+
+
+        //wiss.displayStream();
+
+        //System.out.println(wiss.getName() + " name");
+
+        FishingReport latest = wiss.getLatesReport();
+        System.out.println("--------------------");
+        latest.displayFishingReport();
+
+        FishingReport report = wiss.getReportByDate(
+            LocalDate.of(2026, 9, 2));
+
+        report.displayFishingReport();
     }
 }
