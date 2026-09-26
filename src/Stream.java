@@ -16,8 +16,12 @@ public class Stream {
         this.reports = new ArrayList<>();
     }
 
-    public void addReport(FishingReport report) {
+    public boolean addReport(FishingReport report) {
+        if (hasReportForDate(report.getDate())){
+            return false;
+        }
         reports.add(report);
+        return true;
     }
 
 
@@ -113,6 +117,10 @@ public class Stream {
         for (FishingReport report : reports){
             report.displayFishingReport();
         }
+    }
+
+    public ArrayList<FishingReport> getReports(){
+        return reports;
     }
 
 }
