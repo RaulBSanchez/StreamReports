@@ -54,8 +54,19 @@ public class Stream {
         }
     }
 
-    public FishingReport getLatesReport(){
-        return reports.get(0);
+    public FishingReport getLatestReport(){
+        if (reports.isEmpty()){
+            return null;
+        }
+
+        FishingReport latest = reports.get(0);
+
+        for (FishingReport report : reports){
+            if (report.getDate().isAfter(latest.getDate())) {
+                latest = report;
+            }
+        }
+        return latest;
     }
 
     public FishingReport getReportByDate(LocalDate date){
@@ -68,6 +79,8 @@ public class Stream {
         return null;
     }
 
+
+
     public boolean hasReportForDate(LocalDate date){
         for (FishingReport report: reports){
             if (report.getDate().equals(date)){
@@ -76,4 +89,30 @@ public class Stream {
         }
         return false;
     }
+
+
+    public void updateReport(FishingReport updatedReport){
+        for (int i = 0; i < reports.size(); i ++) {
+            if (reports.get(i).getDate().equals(updatedReport.getDate())){
+                reports.set(i, updatedReport);
+                return;
+            }
+        }
+    }
+
+    public void deleteReport(FishingReport deleteReport){
+        for (int i =0; i < reports.size(); i ++){
+            if (reports.get(i).getDate().equals(deleteReport.getDate())){
+                reports.remove(i);
+                return;
+            }
+        }
+    }
+
+    public void allReports(){
+        for (FishingReport report : reports){
+            report.displayFishingReport();
+        }
+    }
+
 }

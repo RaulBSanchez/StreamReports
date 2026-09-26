@@ -57,16 +57,13 @@ public class FishingReport {
         this.notes = notes;
     }
 
-    public LocalDate getdate(){
-        return date;
-    }
-
     public void displayFishingReport() {
-        System.out.println("Fishing Report");
-        System.out.println("Date: " + date);
-        System.out.println("Water Temperature: " + waterTemperature);
-        System.out.println("Water Level: " + waterLevel);
-        System.out.println("Water Clarity: " + waterClarity);
-        System.out.println("Notes: " + notes);
+        System.out.println(
+            "Date: " + date +
+            " | Water Temperature: " + waterTemperature +
+            " | Water Level: " + waterLevel +
+            " | Water Clarity: " + waterClarity +
+            " | Notes: " + notes
+        );
     }
 }
