@@ -1,4 +1,6 @@
 import java.time.LocalDate;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.DynamicTest.stream;
@@ -12,7 +14,8 @@ public class StreamTest {
         Stream wiss = new Stream(
             "Wissahickon",
             "Philadelphia",
-            "PA"
+            "PA",
+            "10000"
         );
 
         FishingReport report1 = new FishingReport(LocalDate.of(2026, 9, 5),57 , 200, "clear", "nothing of note");
@@ -26,7 +29,8 @@ public class StreamTest {
         Stream wiss = new Stream(
             "Wissahickon",
             "Philadelphia",
-            "PA"
+            "PA",
+            "10000"
         );
         FishingReport missedReport  = wiss.getReportByDate(LocalDate.of(2026, 8,1));
         
@@ -40,7 +44,8 @@ public class StreamTest {
         Stream wiss = new Stream(
             "Wissahickon",
             "Philadelphia",
-            "PA"
+            "PA",
+            "10000"
         );
 
         FishingReport latestEmpty = wiss.getLatestReport();
@@ -54,7 +59,8 @@ public class StreamTest {
         Stream stream = new Stream(
         "Wissahickon",
         "Philadelphia",
-        "PA"
+        "PA",
+        "10000"
         );
 
         FishingReport report = new FishingReport(
@@ -77,7 +83,8 @@ public class StreamTest {
         Stream stream = new Stream(
         "Wissahickon",
         "Philadelphia",
-        "PA"
+        "PA",
+        "10000"
         );
 
         FishingReport nonexistentReport = new FishingReport(
@@ -92,6 +99,71 @@ public class StreamTest {
         assertFalse(stream.hasReportForDate(LocalDate.of(2026, 8, 5)));
 
     }
+
+    @Test 
+    void updateExistingReport(){
+        Stream stream = new Stream(
+        "Wissahickon",
+        "Philadelphia",
+        "PA",
+        "10000"
+    );
+
+    FishingReport originalReport = new FishingReport(
+        LocalDate.of(2026, 9, 5),
+        57,
+        200,
+        "clear",
+        "nothing of note"
+    );
+
+    stream.addReport(originalReport);
+
+    FishingReport newReport = new FishingReport(
+        LocalDate.of(2026, 9, 5),
+        60,
+        250,
+        "muddy",
+        "water level increased");
+
+    
+    stream.updateReport(newReport);
+
+    FishingReport result = stream.getReportByDate(LocalDate.of(2026, 9, 5));
+
+    assertEquals(60, result.getWaterTemperature());
+    assertEquals(250, result.getWaterLevel());
+    assertEquals("muddy", result.getWaterClarity());
+    assertEquals("water level increased", result.getNotes());
+
+    }
+
+
+    @Test
+    void deleteExistingReport() {
+    Stream stream = new Stream(
+        "Wissahickon",
+        "Philadelphia",
+        "PA", 
+        "01474000"
+    );
+
+    FishingReport report = new FishingReport(
+        LocalDate.of(2026, 9, 5),
+        57,
+        200,
+        "clear",
+        "nothing of note"
+    );
+
+    stream.addReport(report);
+
+    stream.deleteReport(report);
+
+    assertFalse(
+        stream.hasReportForDate(LocalDate.of(2026, 9, 5))
+    );
+}
 }
 
 

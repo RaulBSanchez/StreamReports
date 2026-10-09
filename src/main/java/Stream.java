@@ -1,18 +1,24 @@
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Collections;
+import java.util.List;
 
 public class Stream {
 
     private String name;
     private String city;
     private String state;
+    private String usgsGaugeId;
 
     private ArrayList<FishingReport> reports;
 
-    public Stream(String name, String city, String state) {
+    public Stream(String name, String city, String state, String usgsGaugeId ) {
         this.name = name;
         this.city = city;
         this.state = state;
+        this.usgsGaugeId = usgsGaugeId;
         this.reports = new ArrayList<>();
     }
 
@@ -119,8 +125,12 @@ public class Stream {
         }
     }
 
-    public ArrayList<FishingReport> getReports(){
-        return reports;
+    public List<FishingReport> getReports(){
+        return Collections.unmodifiableList(reports);
+    }
+
+    public String getusgsGaugeId(){
+        return usgsGaugeId;
     }
 
 }
