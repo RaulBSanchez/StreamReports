@@ -1,4 +1,5 @@
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -18,7 +19,7 @@ public class StreamTest {
             "10000"
         );
 
-        FishingReport report1 = new FishingReport(LocalDate.of(2026, 9, 5),57 , 200, "clear", "nothing of note");
+        FishingReport report1 = new FishingReport(LocalDate.of(2026, 9, 5),57, "clear", "nothing of note");
         wiss.addReport(report1);
         boolean addedAgain = wiss.addReport(report1);
         assertFalse(addedAgain);
@@ -66,7 +67,6 @@ public class StreamTest {
         FishingReport report = new FishingReport(
             LocalDate.of(2026, 8, 1),
             50,
-            100,
             "muddy",
             "This report doesn't exist"
         );
@@ -90,7 +90,6 @@ public class StreamTest {
         FishingReport nonexistentReport = new FishingReport(
         LocalDate.of(2026, 8, 5),
         55,
-        150,
         "clear",
         "Doesn't exist"
         );
@@ -112,7 +111,6 @@ public class StreamTest {
     FishingReport originalReport = new FishingReport(
         LocalDate.of(2026, 9, 5),
         57,
-        200,
         "clear",
         "nothing of note"
     );
@@ -122,17 +120,24 @@ public class StreamTest {
     FishingReport newReport = new FishingReport(
         LocalDate.of(2026, 9, 5),
         60,
-        250,
         "muddy",
         "water level increased");
 
-    
+    newReport.setFlowReading(new FlowReading(
+        250,
+        3.1,
+        LocalDateTime.of(2026, 9, 5, 8, 0),
+        "USGS",
+        "https://waterdata.usgs.gov/monitoring-location/USGS-01474000/",
+        FlowRating.PUSHY));
+
     stream.updateReport(newReport);
 
     FishingReport result = stream.getReportByDate(LocalDate.of(2026, 9, 5));
 
-    assertEquals(60, result.getWaterTemperature());
-    assertEquals(250, result.getWaterLevel());
+    assertEquals(60, result.getMinWaterTemperature());
+    assertEquals(60, result.getMaxWaterTemperature());
+    assertEquals(250, result.getFlowReading().getFlowCfs(), 0.001);
     assertEquals("muddy", result.getWaterClarity());
     assertEquals("water level increased", result.getNotes());
 
@@ -151,7 +156,6 @@ public class StreamTest {
     FishingReport report = new FishingReport(
         LocalDate.of(2026, 9, 5),
         57,
-        200,
         "clear",
         "nothing of note"
     );

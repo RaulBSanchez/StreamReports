@@ -19,7 +19,6 @@ public class FishingReport {
     public FishingReport(
         LocalDate date,
         int waterTemperature,
-        int waterLevel,
         String waterClarity,
         String notes
     ) {
@@ -28,7 +27,6 @@ public class FishingReport {
         this.maxWaterTemperature = waterTemperature;
         this.waterClarity = waterClarity;
         this.notes = notes;
-        this.legacyWaterLevel = waterLevel;
     }
 
     public FishingReport(
@@ -54,8 +52,6 @@ public class FishingReport {
         this.notes = notes;
         this.flowReading = flowReading;
     }
-
-    private int legacyWaterLevel;
 
     public LocalDate getDate() {
         return date;
@@ -99,33 +95,6 @@ public class FishingReport {
 
     public void setMaxWaterTemperature(Integer temperature) {
         this.maxWaterTemperature = temperature;
-    }
-
-    public int getWaterTemperature() {
-        if (minWaterTemperature == null) {
-            throw new IllegalStateException(
-                "Water temperature is unknown"
-            );
-        }
-
-        return minWaterTemperature;
-    }
-
-    public void setWaterTemperature(int temperature) {
-        this.minWaterTemperature = temperature;
-        this.maxWaterTemperature = temperature;
-    }
-
-    public int getWaterLevel() {
-        if (flowReading != null) {
-            return (int) flowReading.getFlowCfs();
-        }
-
-        return legacyWaterLevel;
-    }
-
-    public void setWaterLevel(int waterLevel) {
-        this.legacyWaterLevel = waterLevel;
     }
 
     public String getConditionsSummary() {
