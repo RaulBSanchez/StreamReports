@@ -1,9 +1,8 @@
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class Stream {
 
@@ -64,9 +63,9 @@ public class Stream {
         }
     }
 
-    public FishingReport getLatestReport(){
+    public Optional<FishingReport> getLatestReport(){
         if (reports.isEmpty()){
-            return null;
+            return Optional.empty();
         }
 
         FishingReport latest = reports.get(0);
@@ -76,17 +75,17 @@ public class Stream {
                 latest = report;
             }
         }
-        return latest;
+        return Optional.of(latest);
     }
 
-    public FishingReport getReportByDate(LocalDate date){
+    public Optional<FishingReport> getReportByDate(LocalDate date){
         for (FishingReport report : reports){
             if (report.getDate().equals(date)){
-                return report;
+                return Optional.of(report);
             }
         }
 
-        return null;
+        return Optional.empty();
     }
 
 
@@ -101,22 +100,24 @@ public class Stream {
     }
 
 
-    public void updateReport(FishingReport updatedReport){
+    public boolean updateReport(FishingReport updatedReport){
         for (int i = 0; i < reports.size(); i ++) {
             if (reports.get(i).getDate().equals(updatedReport.getDate())){
                 reports.set(i, updatedReport);
-                return;
+                return true;
             }
         }
+        return false;
     }
 
-    public void deleteReport(FishingReport deleteReport){
+    public boolean deleteReport(LocalDate date){
         for (int i =0; i < reports.size(); i ++){
-            if (reports.get(i).getDate().equals(deleteReport.getDate())){
+            if (reports.get(i).getDate().equals(date)){
                 reports.remove(i);
-                return;
+                return true;
             }
         }
+        return false;
     }
 
     public void allReports(){
@@ -129,7 +130,7 @@ public class Stream {
         return Collections.unmodifiableList(reports);
     }
 
-    public String getusgsGaugeId(){
+    public String getUsgsGaugeId(){
         return usgsGaugeId;
     }
 

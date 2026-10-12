@@ -3,15 +3,13 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.DynamicTest.stream;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
-import org.junit.platform.commons.annotation.Testable;
 
 public class StreamTest {
-    @Test 
-    void duplipcateIsRejected(){
+    @Test
+    void duplicateIsRejected(){
         Stream wiss = new Stream(
             "Wissahickon",
             "Philadelphia",
@@ -25,7 +23,7 @@ public class StreamTest {
         assertFalse(addedAgain);
     }
 
-    @Test 
+    @Test
     void missingDate(){
         Stream wiss = new Stream(
             "Wissahickon",
@@ -33,15 +31,12 @@ public class StreamTest {
             "PA",
             "10000"
         );
-        FishingReport missedReport  = wiss.getReportByDate(LocalDate.of(2026, 8,1));
-        
-        assertNull(missedReport);
 
-
+        assertTrue(wiss.getReportByDate(LocalDate.of(2026, 8,1)).isEmpty());
     }
 
-    @Test 
-    void zeroReorts(){
+    @Test
+    void zeroReports(){
         Stream wiss = new Stream(
             "Wissahickon",
             "Philadelphia",
@@ -49,9 +44,7 @@ public class StreamTest {
             "10000"
         );
 
-        FishingReport latestEmpty = wiss.getLatestReport();
-
-        assertNull(latestEmpty);
+        assertTrue(wiss.getLatestReport().isEmpty());
     }
 
     @Test
@@ -71,14 +64,13 @@ public class StreamTest {
             "This report doesn't exist"
         );
 
-        stream.updateReport(report);
+        boolean updated = stream.updateReport(report);
 
+        assertFalse(updated);
         assertFalse(stream.hasReportForDate(LocalDate.of(2026,8,1)));
-
-
-
     }
-    @Test 
+
+    @Test
     void deleteNonexistentReport(){
         Stream stream = new Stream(
         "Wissahickon",
@@ -87,19 +79,13 @@ public class StreamTest {
         "10000"
         );
 
-        FishingReport nonexistentReport = new FishingReport(
-        LocalDate.of(2026, 8, 5),
-        55,
-        "clear",
-        "Doesn't exist"
-        );
+        boolean deleted = stream.deleteReport(LocalDate.of(2026, 8, 5));
 
-        stream.deleteReport(nonexistentReport);
+        assertFalse(deleted);
         assertFalse(stream.hasReportForDate(LocalDate.of(2026, 8, 5)));
-
     }
 
-    @Test 
+    @Test
     void updateExistingReport(){
         Stream stream = new Stream(
         "Wissahickon",
@@ -131,9 +117,9 @@ public class StreamTest {
         "https://waterdata.usgs.gov/monitoring-location/USGS-01474000/",
         FlowRating.PUSHY));
 
-    stream.updateReport(newReport);
+    assertTrue(stream.updateReport(newReport));
 
-    FishingReport result = stream.getReportByDate(LocalDate.of(2026, 9, 5));
+    FishingReport result = stream.getReportByDate(LocalDate.of(2026, 9, 5)).orElseThrow();
 
     assertEquals(60, result.getMinWaterTemperature());
     assertEquals(60, result.getMaxWaterTemperature());
@@ -149,7 +135,7 @@ public class StreamTest {
     Stream stream = new Stream(
         "Wissahickon",
         "Philadelphia",
-        "PA", 
+        "PA",
         "01474000"
     );
 
@@ -162,14 +148,10 @@ public class StreamTest {
 
     stream.addReport(report);
 
-    stream.deleteReport(report);
+    assertTrue(stream.deleteReport(LocalDate.of(2026, 9, 5)));
 
     assertFalse(
         stream.hasReportForDate(LocalDate.of(2026, 9, 5))
     );
 }
 }
-
-
-
-
