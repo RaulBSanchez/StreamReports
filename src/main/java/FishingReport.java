@@ -22,6 +22,7 @@ public class FishingReport {
         String waterClarity,
         String notes
     ) {
+        requireDate(date);
         this.date = date;
         this.minWaterTemperature = waterTemperature;
         this.maxWaterTemperature = waterTemperature;
@@ -41,6 +42,8 @@ public class FishingReport {
         String notes,
         FlowReading flowReading
     ) {
+        requireDate(date);
+        requireValidRange(minWaterTemperature, maxWaterTemperature);
         this.date = date;
         this.headline = headline;
         this.rating = rating;
@@ -51,6 +54,21 @@ public class FishingReport {
         this.fishingAdvice = fishingAdvice;
         this.notes = notes;
         this.flowReading = flowReading;
+    }
+
+    private static void requireDate(LocalDate date) {
+        if (date == null) {
+            throw new IllegalArgumentException("Report date is required");
+        }
+    }
+
+    private static void requireValidRange(Integer min, Integer max) {
+        if (min != null && max != null && min > max) {
+            throw new IllegalArgumentException(
+                "Minimum water temperature " + min
+                + " is above maximum " + max
+            );
+        }
     }
 
     public LocalDate getDate() {
@@ -86,6 +104,7 @@ public class FishingReport {
     }
 
     public void setMinWaterTemperature(Integer temperature) {
+        requireValidRange(temperature, maxWaterTemperature);
         this.minWaterTemperature = temperature;
     }
 
@@ -94,6 +113,7 @@ public class FishingReport {
     }
 
     public void setMaxWaterTemperature(Integer temperature) {
+        requireValidRange(minWaterTemperature, temperature);
         this.maxWaterTemperature = temperature;
     }
 

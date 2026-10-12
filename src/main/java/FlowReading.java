@@ -16,6 +16,12 @@ public class FlowReading {
         String sourceUrl,
         FlowRating rating
     ) {
+        if (flowCfs < 0) {
+            throw new IllegalArgumentException(
+                "Flow cannot be negative: " + flowCfs
+            );
+        }
+
         this.flowCfs = flowCfs;
         this.gaugeHeightFeet = gaugeHeightFeet;
         this.measuredAt = measuredAt;
