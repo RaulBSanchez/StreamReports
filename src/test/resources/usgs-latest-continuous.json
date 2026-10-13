@@ -1,0 +1,76 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "time_series_id": "b5565f1f0bb24b8d98845b566def403c",
+        "monitoring_location_id": "USGS-01548030",
+        "parameter_code": "00010",
+        "statistic_id": "00011",
+        "time": "2026-10-13T19:30:00+00:00",
+        "value": "13.8",
+        "unit_of_measure": "degC",
+        "approval_status": "Provisional",
+        "qualifier": null,
+        "last_modified": "2026-10-13T19:35:32.384441+00:00"
+      },
+      "id": "2d23007a-778d-48f6-b371-0dd5586841e8",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.48277777777778,
+          40.980472222222225
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "time_series_id": "dd7fe0389b774d57a055604fd105ad23",
+        "monitoring_location_id": "USGS-01548030",
+        "parameter_code": "00060",
+        "statistic_id": "00011",
+        "time": "2026-10-13T19:30:00+00:00",
+        "value": "76.8",
+        "unit_of_measure": "ft^3/s",
+        "approval_status": "Provisional",
+        "qualifier": null,
+        "last_modified": "2026-10-13T19:35:37.643173+00:00"
+      },
+      "id": "8523af3a-e2f9-4cda-9d86-9f309794ee71",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.48277777777778,
+          40.980472222222225
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "time_series_id": "15c4e62814c94c82afbf0607203aa630",
+        "monitoring_location_id": "USGS-01548030",
+        "parameter_code": "00065",
+        "statistic_id": "00011",
+        "time": "2026-10-13T19:30:00+00:00",
+        "value": "2.64",
+        "unit_of_measure": "ft",
+        "approval_status": "Provisional",
+        "qualifier": null,
+        "last_modified": "2026-10-13T19:35:35.273576+00:00"
+      },
+      "id": "c3018c7e-ebc8-487b-a31b-dfeee246b390",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.48277777777778,
+          40.980472222222225
+        ]
+      }
+    }
+  ],
+  "numberReturned": 3,
+  "timeStamp": "2026-10-13T19:39:11.274998Z"
+}

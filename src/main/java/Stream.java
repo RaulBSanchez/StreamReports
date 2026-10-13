@@ -4,37 +4,59 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * A stream, its USGS gauge, and the gauge readings collected for it, with at
+ * most one reading per measurement time.
+ */
 public class Stream {
 
     private String name;
     private String city;
     private String state;
+    // USGS monitoring location ID, used to look up the stream's flow gauge
     private String usgsGaugeId;
 
-    private ArrayList<FishingReport> reports;
+    private ArrayList<GaugeReading> readings;
 
     public Stream(String name, String city, String state, String usgsGaugeId ) {
+        requireName(name);
         this.name = name;
         this.city = city;
         this.state = state;
         this.usgsGaugeId = usgsGaugeId;
-        this.reports = new ArrayList<>();
+        this.readings = new ArrayList<>();
     }
 
-    public boolean addReport(FishingReport report) {
-        if (hasReportForDate(report.getDate())){
-            return false;
+    private static void requireName(String name) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Stream name is required");
         }
-        reports.add(report);
+    }
+
+    /**
+     * Returns false, and adds nothing, if a reading with the same measurement
+     * time is already stored. USGS only updates every 15 minutes, so fetching
+     * twice in a row gives the same reading.
+     */
+    public boolean addReading(GaugeReading reading) {
+        if (reading == null) {
+            throw new IllegalArgumentException("Reading is required");
+        }
+        for (GaugeReading existing : readings) {
+            if (existing.getMeasuredAt().equals(reading.getMeasuredAt())) {
+                return false;
+            }
+        }
+        readings.add(reading);
         return true;
     }
-
 
     public String getName(){
         return name;
     }
 
     public void setName(String name){
+        requireName(name);
         this.name = name;
     }
 
@@ -54,84 +76,51 @@ public class Stream {
         this.state = state;
     }
 
-    public void displayStream() {
-        System.out.println(name);
-        System.out.println(city + ", " + state);
-
-        for (FishingReport reporty : reports) {
-            reporty.displayFishingReport();
-        }
-    }
-
-    public Optional<FishingReport> getLatestReport(){
-        if (reports.isEmpty()){
-            return Optional.empty();
-        }
-
-        FishingReport latest = reports.get(0);
-
-        for (FishingReport report : reports){
-            if (report.getDate().isAfter(latest.getDate())) {
-                latest = report;
-            }
-        }
-        return Optional.of(latest);
-    }
-
-    public Optional<FishingReport> getReportByDate(LocalDate date){
-        for (FishingReport report : reports){
-            if (report.getDate().equals(date)){
-                return Optional.of(report);
-            }
-        }
-
-        return Optional.empty();
-    }
-
-
-
-    public boolean hasReportForDate(LocalDate date){
-        for (FishingReport report: reports){
-            if (report.getDate().equals(date)){
-                return true;
-            }
-        }
-        return false;
-    }
-
-
-    public boolean updateReport(FishingReport updatedReport){
-        for (int i = 0; i < reports.size(); i ++) {
-            if (reports.get(i).getDate().equals(updatedReport.getDate())){
-                reports.set(i, updatedReport);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean deleteReport(LocalDate date){
-        for (int i =0; i < reports.size(); i ++){
-            if (reports.get(i).getDate().equals(date)){
-                reports.remove(i);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void allReports(){
-        for (FishingReport report : reports){
-            report.displayFishingReport();
-        }
-    }
-
-    public List<FishingReport> getReports(){
-        return Collections.unmodifiableList(reports);
-    }
-
     public String getUsgsGaugeId(){
         return usgsGaugeId;
     }
 
+    public void setUsgsGaugeId(String usgsGaugeId){
+        this.usgsGaugeId = usgsGaugeId;
+    }
+
+    public void displayStream() {
+        System.out.println(name);
+        System.out.println(city + ", " + state);
+
+        getLatestReading().ifPresentOrElse(
+            GaugeReading::displayGaugeReading,
+            () -> System.out.println("No gauge readings yet")
+        );
+    }
+
+    /** The reading with the most recent measurement time, not the one added last. */
+    public Optional<GaugeReading> getLatestReading(){
+        GaugeReading latest = null;
+
+        for (GaugeReading reading : readings){
+            if (latest == null || reading.getMeasuredAt().isAfter(latest.getMeasuredAt())) {
+                latest = reading;
+            }
+        }
+        return Optional.ofNullable(latest);
+    }
+
+    /** All readings measured on that date, earliest first. */
+    public List<GaugeReading> getReadingsOn(LocalDate date){
+        List<GaugeReading> matches = new ArrayList<>();
+
+        for (GaugeReading reading : readings){
+            if (reading.getMeasuredAt().toLocalDate().equals(date)){
+                matches.add(reading);
+            }
+        }
+        matches.sort((a, b) -> a.getMeasuredAt().compareTo(b.getMeasuredAt()));
+        return Collections.unmodifiableList(matches);
+    }
+
+    /** A read-only list, in the order the readings were added. */
+    public List<GaugeReading> getReadings(){
+        return Collections.unmodifiableList(readings);
+    }
 }
