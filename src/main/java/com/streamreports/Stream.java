@@ -1,3 +1,5 @@
+package com.streamreports;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;

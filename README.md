@@ -1,8 +1,8 @@
 # Stream Reports
 
-A Java app for tracking trout stream conditions from USGS gauges: flow, gauge height and water temperature, with a rating of how safe the water temperature is for trout.
+A Spring Boot app for tracking trout stream conditions from USGS gauges: flow, gauge height and water temperature, with a rating of how safe the water temperature is for trout.
 
-Right now `App` fetches the latest USGS reading for Big Fishing Creek (Lamar, PA), stores it on the stream and prints it to the console. Nothing is saved between runs yet.
+Right now, when `App` starts, it fetches the latest USGS reading for five Pennsylvania streams, stores each one on its stream and prints them to the console. The app then keeps running as a web server on port 8080 (no endpoints yet). Nothing is saved between runs yet.
 
 ## Requirements
 
@@ -12,8 +12,8 @@ Right now `App` fetches the latest USGS reading for Big Fishing Creek (Lamar, PA
 ## Running
 
 ```sh
-mvn test                                    # run the test suite
-mvn compile exec:java -Dexec.mainClass=App  # fetch and print the live USGS reading
+mvn test              # run the test suite
+mvn spring-boot:run   # start the app; fetches and prints the live USGS readings (Ctrl+C to stop)
 ```
 
 ## Model
@@ -70,11 +70,13 @@ Gauge height is not checked, because USGS gauge heights are relative to a local 
 ## Project layout
 
 ```
-src/main/java/        App, Stream, GaugeReading, TemperatureRating, FlowRating, UsgsClient
-src/test/java/        StreamTest, GaugeReadingTest, UsgsClientTest (JUnit 5)
-src/test/resources/   Sample USGS response used by UsgsClientTest
-pom.xml               Maven build, Java 17, Jackson 2.18.2, JUnit Jupiter 5.12.2
+src/main/java/com/streamreports/   App, Stream, GaugeReading, TemperatureRating, FlowRating, UsgsClient
+src/test/java/com/streamreports/   StreamTest, GaugeReadingTest, UsgsClientTest (JUnit 5)
+src/test/resources/                Sample USGS response used by UsgsClientTest
+pom.xml                            Maven build, Java 17, Spring Boot 3.5.6 (starter-web, starter-test)
 ```
+
+All classes are in the `com.streamreports` package. `App` is the `@SpringBootApplication` class, so Spring finds components in that package and the packages under it.
 
 Build output in `target/` and `bin/` is git-ignored.
 
@@ -82,4 +84,5 @@ Build output in `target/` and `bin/` is git-ignored.
 
 - Work out `FlowRating` from cfs with per-stream thresholds
 - Save and load streams and readings as JSON
-- Manage multiple streams instead of one hardcoded stream in `App`
+- Move the hardcoded stream list out of `App`
+- REST endpoints for streams and their readings

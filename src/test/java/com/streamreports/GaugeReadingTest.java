@@ -1,3 +1,5 @@
+package com.streamreports;
+
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

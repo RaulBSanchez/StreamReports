@@ -1,3 +1,5 @@
+package com.streamreports;
+
 /**
  * How suitable the water temperature is for trout. Each band includes its
  * lower bound, so 56°F is PRIME and 68°F is NOT_SAFE.
