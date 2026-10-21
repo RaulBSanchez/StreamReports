@@ -2,7 +2,7 @@
 
 A Spring Boot app for tracking trout stream conditions from USGS gauges: flow, gauge height and water temperature, with a rating of how safe the water temperature is for trout.
 
-Right now, when `App` starts, it fetches the latest USGS reading for five Pennsylvania streams, stores each one on its stream and prints them to the console. The app then keeps running as a web server on port 8080 (no endpoints yet). Nothing is saved between runs yet.
+The app runs a web server on port 8080. `GET /api/streams` fetches the latest USGS reading for each stream configured in `application.yml` (five Pennsylvania streams) and returns them as JSON. Readings are kept in memory while the app runs; nothing is saved between runs yet.
 
 ## Requirements
 
@@ -13,8 +13,12 @@ Right now, when `App` starts, it fetches the latest USGS reading for five Pennsy
 
 ```sh
 mvn test              # run the test suite
-mvn spring-boot:run   # start the app; fetches and prints the live USGS readings (Ctrl+C to stop)
+mvn spring-boot:run   # start the app on http://localhost:8080 (Ctrl+C to stop)
 ```
+
+Then open http://localhost:8080/api/streams. Each entry has the stream's name, city, state, `usgsGaugeId`, `latestReading` and `error`. If a USGS request fails, that stream is still included: `error` says what went wrong and `latestReading` is the last reading stored, or `null` if there isn't one.
+
+To add or change streams, edit `stream-reports.streams` in `src/main/resources/application.yml`.
 
 ## Model
 
@@ -25,6 +29,8 @@ mvn spring-boot:run   # start the app; fetches and prints the live USGS readings
 | `TemperatureRating` | Worked out from water temperature (see below). |
 | `FlowRating` | `SKINNY`, `PRIME`, `PUSHY`, `BLOWN`. Not set on live readings yet. |
 | `UsgsClient` | Fetches the latest `GaugeReading` for a gauge from USGS. |
+| `StreamService` | Builds a `Stream` for each configured stream and fetches their latest readings. |
+| `StreamController` | Serves `GET /api/streams`. |
 
 ### Water temperature ratings
 
@@ -70,8 +76,11 @@ Gauge height is not checked, because USGS gauge heights are relative to a local 
 ## Project layout
 
 ```
-src/main/java/com/streamreports/   App, Stream, GaugeReading, TemperatureRating, FlowRating, UsgsClient
-src/test/java/com/streamreports/   StreamTest, GaugeReadingTest, UsgsClientTest (JUnit 5)
+src/main/java/com/streamreports/   App, StreamController, StreamService, StreamReport, StreamProperties,
+                                   Stream, GaugeReading, TemperatureRating, FlowRating, UsgsClient
+src/main/resources/application.yml The streams to report on and their USGS gauge IDs
+src/test/java/com/streamreports/   StreamTest, GaugeReadingTest, UsgsClientTest, StreamServiceTest,
+                                   StreamControllerTest (JUnit 5)
 src/test/resources/                Sample USGS response used by UsgsClientTest
 pom.xml                            Maven build, Java 17, Spring Boot 3.5.6 (starter-web, starter-test)
 ```
@@ -84,5 +93,4 @@ Build output in `target/` and `bin/` is git-ignored.
 
 - Work out `FlowRating` from cfs with per-stream thresholds
 - Save and load streams and readings as JSON
-- Move the hardcoded stream list out of `App`
-- REST endpoints for streams and their readings
+- More endpoints, e.g. one stream by gauge ID, or a stream's stored readings

@@ -1,0 +1,23 @@
+stream-reports:
+  # usgs-gauge-id is the USGS monitoring location ID without the "USGS-" prefix
+  streams:
+    - name: Big Fishing Creek
+      city: Lamar
+      state: PA
+      usgs-gauge-id: "01548030"
+    - name: Tulpehocken Creek
+      city: Reading
+      state: PA
+      usgs-gauge-id: "01470960"   # at Blue Marsh Damsite
+    - name: Pohopoco Creek
+      city: Parryville
+      state: PA
+      usgs-gauge-id: "01449800"   # below Beltzville Dam
+    - name: Wissahickon Creek
+      city: Philadelphia
+      state: PA
+      usgs-gauge-id: "01474000"   # at mouth
+    - name: Valley Creek
+      city: Valley Forge
+      state: PA
+      usgs-gauge-id: "01473169"   # at PA Turnpike bridge
