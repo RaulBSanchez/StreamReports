@@ -8,6 +8,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("stream-reports")
 public record StreamProperties(List<StreamConfig> streams) {
 
+
+    //Compact Constructor
     public StreamProperties {
         if (streams == null) {
             streams = List.of();
