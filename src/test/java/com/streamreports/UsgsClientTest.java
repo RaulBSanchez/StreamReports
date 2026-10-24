@@ -49,7 +49,6 @@ public class UsgsClientTest {
         assertEquals(LocalDateTime.of(2026, 10, 13, 19, 30), reading.getMeasuredAt());
         assertEquals("USGS", reading.getSource());
         assertEquals("https://waterdata.usgs.gov/monitoring-location/USGS-01548030/", reading.getSourceUrl());
-        assertTrue(reading.getFlowRating().isEmpty());
         assertEquals(56.84, reading.getWaterTemperatureF().orElseThrow(), 0.001);
         assertEquals(TemperatureRating.PRIME, reading.getTemperatureRating().orElseThrow());
     }

@@ -25,7 +25,7 @@ public class StreamControllerTest {
     @Test
     void returnsStreamsAsJson() throws Exception {
         GaugeReading reading = new GaugeReading(
-            77.9, 2.65, 54.0, LocalDateTime.of(2026, 10, 20, 15, 30), "USGS", null, null
+            77.9, 2.65, 54.0, LocalDateTime.of(2026, 10, 20, 15, 30), "USGS", null
         );
         when(streamService.fetchLatestReports()).thenReturn(List.of(
             new StreamReport("Big Fishing Creek", "Lamar", "PA", "01548030", reading, null),
@@ -41,7 +41,6 @@ public class StreamControllerTest {
             .andExpect(jsonPath("$[0].latestReading.waterTemperatureF").value(54.0))
             .andExpect(jsonPath("$[0].latestReading.temperatureRating").value("COOL"))
             .andExpect(jsonPath("$[0].latestReading.measuredAt").value("2026-10-20T15:30:00"))
-            .andExpect(jsonPath("$[0].latestReading.flowRating").doesNotExist())
             .andExpect(jsonPath("$[1].latestReading").isEmpty())
             .andExpect(jsonPath("$[1].error").value("Couldn't fetch the USGS reading: timed out"));
     }

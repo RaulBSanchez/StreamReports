@@ -25,9 +25,8 @@ To add or change streams, edit `stream-reports.streams` in `src/main/resources/a
 | Class | What it holds |
 | --- | --- |
 | `Stream` | A named stream (city, state, USGS gauge ID) and the gauge readings collected for it. Allows one reading per measurement time. |
-| `GaugeReading` | What a gauge measured at one moment: flow (cfs), gauge height (ft, optional), water temperature (°F, optional), time measured, source, source URL, and a `FlowRating` (optional). Can't be changed after it is created. |
+| `GaugeReading` | What a gauge measured at one moment: flow (cfs), gauge height (ft, optional), water temperature (°F, optional), time measured, source and source URL. Can't be changed after it is created. |
 | `TemperatureRating` | Worked out from water temperature (see below). |
-| `FlowRating` | `SKINNY`, `PRIME`, `PUSHY`, `BLOWN`. Not set on live readings yet. |
 | `UsgsClient` | Fetches the latest `GaugeReading` for a gauge from USGS. |
 | `StreamService` | Builds a `Stream` for each configured stream and fetches their latest readings. |
 | `StreamController` | Serves `GET /api/streams`. |
@@ -77,7 +76,7 @@ Gauge height is not checked, because USGS gauge heights are relative to a local 
 
 ```
 src/main/java/com/streamreports/   App, StreamController, StreamService, StreamReport, StreamProperties,
-                                   Stream, GaugeReading, TemperatureRating, FlowRating, UsgsClient
+                                   Stream, GaugeReading, TemperatureRating, UsgsClient
 src/main/resources/application.yml The streams to report on and their USGS gauge IDs
 src/test/java/com/streamreports/   StreamTest, GaugeReadingTest, UsgsClientTest, StreamServiceTest,
                                    StreamControllerTest (JUnit 5)
@@ -91,6 +90,6 @@ Build output in `target/` and `bin/` is git-ignored.
 
 ## Planned
 
-- Work out `FlowRating` from cfs with per-stream thresholds
+- Rate flow (e.g. skinny / prime / pushy / blown) from cfs with per-stream thresholds
 - Save and load streams and readings as JSON
 - More endpoints, e.g. one stream by gauge ID, or a stream's stored readings

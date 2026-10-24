@@ -22,7 +22,7 @@ public class StreamTest {
     }
 
     private GaugeReading reading(LocalDateTime measuredAt, double flowCfs){
-        return new GaugeReading(flowCfs, 2.5, 55.0, measuredAt, "USGS", null, null);
+        return new GaugeReading(flowCfs, 2.5, 55.0, measuredAt, "USGS", null);
     }
 
     @Test

@@ -50,7 +50,6 @@ public class UsgsClient {
 
     /**
      * Gets the latest reading for a gauge, e.g. "01548030" (without the "USGS-" prefix).
-     * The reading has no FlowRating yet; that needs per-stream thresholds.
      *
      * @throws IOException if the request fails or the gauge has no current discharge value
      */
@@ -100,8 +99,7 @@ public class UsgsClient {
             temperature == null ? null : toFahrenheit(temperature),
             discharge.time.atZoneSameInstant(zone).toLocalDateTime(),
             "USGS",
-            LOCATION_PAGE_URL + "USGS-" + gaugeId + "/",
-            null
+            LOCATION_PAGE_URL + "USGS-" + gaugeId + "/"
         );
     }
 

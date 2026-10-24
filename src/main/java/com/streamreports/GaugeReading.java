@@ -17,17 +17,13 @@ public class GaugeReading {
     private final String source;
     private final String sourceUrl;
 
-    // Null until per-stream flow thresholds exist
-    private final FlowRating flowRating;
-
     public GaugeReading(
         double flowCfs,
         Double gaugeHeightFeet,
         Double waterTemperatureF,
         LocalDateTime measuredAt,
         String source,
-        String sourceUrl,
-        FlowRating flowRating
+        String sourceUrl
     ) {
         // Gauge height isn't checked: USGS heights are measured from a local
         // reference point, so a negative value can be a real reading.
@@ -46,7 +42,6 @@ public class GaugeReading {
         this.measuredAt = measuredAt;
         this.source = source;
         this.sourceUrl = sourceUrl;
-        this.flowRating = flowRating;
     }
 
     public double getFlowCfs() {
@@ -78,14 +73,9 @@ public class GaugeReading {
         return sourceUrl;
     }
 
-    public Optional<FlowRating> getFlowRating() {
-        return Optional.ofNullable(flowRating);
-    }
-
     public void displayGaugeReading() {
         System.out.println("Measured at: " + measuredAt);
         System.out.println("Flow: " + flowCfs + " CFS");
-        System.out.println("Flow rating: " + (flowRating == null ? "not rated" : flowRating));
 
         if (gaugeHeightFeet != null) {
             System.out.println("Gauge height: " + gaugeHeightFeet + " ft");

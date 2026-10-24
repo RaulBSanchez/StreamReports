@@ -24,7 +24,7 @@ public class StreamServiceTest {
     }
 
     private GaugeReading reading(double flowCfs, LocalDateTime measuredAt){
-        return new GaugeReading(flowCfs, 2.5, 55.0, measuredAt, "USGS", null, null);
+        return new GaugeReading(flowCfs, 2.5, 55.0, measuredAt, "USGS", null);
     }
 
     @Test
