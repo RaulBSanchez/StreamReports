@@ -9,7 +9,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public record StreamProperties(List<StreamConfig> streams) {
 
     public StreamProperties {
-        streams = streams == null ? List.of() : List.copyOf(streams);
+        if (streams == null) {
+            streams = List.of();
+        }else {
+        streams = List.copyOf(streams);
+        }
     }
 
     public record StreamConfig(String name, String city, String state, String usgsGaugeId) {}
