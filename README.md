@@ -4,10 +4,13 @@ A Spring Boot app for tracking trout stream conditions from USGS gauges: flow, g
 
 The app runs a web server on port 8080. `GET /api/streams` fetches the latest USGS reading for each stream configured in `application.yml` (five Pennsylvania streams) and returns them as JSON. Readings are kept in memory while the app runs; nothing is saved between runs yet.
 
+A React + Vite frontend lives in `frontend/`. It is only the Vite starter page so far and doesn't call the API yet.
+
 ## Requirements
 
 - Java 17+
 - Maven 3.x
+- Node.js 20.19+ or 22.12+, and npm (for the frontend)
 
 ## Running
 
@@ -17,6 +20,18 @@ mvn spring-boot:run   # start the app on http://localhost:8080 (Ctrl+C to stop)
 ```
 
 Then open http://localhost:8080/api/streams. Each entry has the stream's name, city, state, `usgsGaugeId`, `latestReading` and `error`. If a USGS request fails, that stream is still included: `error` says what went wrong and `latestReading` is the last reading stored, or `null` if there isn't one.
+
+### Frontend
+
+In a second terminal, with the Spring Boot app running:
+
+```sh
+cd frontend
+npm install           # first time only
+npm run dev           # start the React app on http://localhost:5173
+```
+
+During development, Vite forwards requests for `/api/...` to the Spring Boot app on port 8080 (see `frontend/vite.config.js`), so React code can call `fetch('/api/streams')` directly.
 
 To add or change streams, edit `stream-reports.streams` in `src/main/resources/application.yml`.
 
@@ -81,6 +96,7 @@ src/main/resources/application.yml The streams to report on and their USGS gauge
 src/test/java/com/streamreports/   StreamTest, GaugeReadingTest, UsgsClientTest, StreamServiceTest,
                                    StreamControllerTest (JUnit 5)
 src/test/resources/                Sample USGS response used by UsgsClientTest
+frontend/                          React + Vite app (npm; its own package.json and .gitignore)
 pom.xml                            Maven build, Java 17, Spring Boot 3.5.6 (starter-web, starter-test)
 ```
 
