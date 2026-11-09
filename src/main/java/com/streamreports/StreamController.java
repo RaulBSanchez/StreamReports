@@ -20,4 +20,6 @@ public class StreamController {
     public List<StreamReport> getStreams() throws InterruptedException {
         return streamService.fetchLatestReports();
     }
+
+    
 }

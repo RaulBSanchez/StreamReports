@@ -15,10 +15,17 @@ public class StreamService {
     private final UsgsClient client;
     private final List<Stream> streams = new ArrayList<>();
 
+    // Config is defined in StreamProperties
     public StreamService(UsgsClient client, StreamProperties properties) {
         this.client = client;
-        for (StreamProperties.StreamConfig config : properties.streams()) {
-            streams.add(new Stream(config.name(), config.city(), config.state(), config.usgsGaugeId()));
+        for (StreamProperties.StreamConfig config : properties.streams()){
+            Stream stream = new Stream(
+                config.name(), 
+                config.city(),
+                config.state(),
+                config.usgsGaugeId()
+            );
+            streams.add(stream);
         }
     }
 
