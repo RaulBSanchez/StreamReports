@@ -18,6 +18,9 @@ public class StreamService {
     // Config is defined in StreamProperties
     public StreamService(UsgsClient client, StreamProperties properties) {
         this.client = client;
+
+        // Turn each stream listed in application.yml into a Stream object.
+        // This happens once, when the app starts.
         for (StreamProperties.StreamConfig config : properties.streams()){
             Stream stream = new Stream(
                 config.name(), 
@@ -38,6 +41,9 @@ public class StreamService {
         List<StreamReport> reports = new ArrayList<>();
 
         for (Stream stream : streams) {
+            // Step 1: ask USGS for a new reading and store it on the stream.
+            // If this fails, remember the error and keep going, so one broken
+            // gauge doesn't stop the other streams from being reported.
             String error = null;
             try {
                 stream.addReading(client.fetchLatest(stream.getUsgsGaugeId()));
@@ -45,6 +51,8 @@ public class StreamService {
                 error = "Couldn't fetch the USGS reading: " + e.getMessage();
             }
 
+            // Step 2: build this stream's entry in the response, using the
+            // newest reading we have (which may be from an earlier request).
             reports.add(new StreamReport(
                 stream.getName(),
                 stream.getCity(),

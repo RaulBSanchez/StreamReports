@@ -11,6 +11,7 @@ public enum TemperatureRating {
     CAUTION("Caution"),
     NOT_SAFE("Not safe for trout");
 
+    // Human-friendly name shown to users, e.g. "Prime"
     private final String label;
 
     TemperatureRating(String label) {
@@ -21,6 +22,11 @@ public enum TemperatureRating {
         return label;
     }
 
+    /**
+     * Picks the rating for a temperature:
+     *   below 48°F -> COLD, 48–55 -> COOL, 56–63 -> PRIME,
+     *   64–67 -> CAUTION, 68 and up -> NOT_SAFE
+     */
     public static TemperatureRating fromFahrenheit(double temperatureF) {
         if (temperatureF < 48) {
             return COLD;

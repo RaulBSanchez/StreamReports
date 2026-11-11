@@ -8,12 +8,15 @@ import java.util.Optional;
  * after it is created.
  */
 public class GaugeReading {
+    // Flow in cubic feet per second (CFS). Every reading must have one.
     private final double flowCfs;
-    // Null if the gauge doesn't measure it
+    // Null if the gauge doesn't measure it. Double (not double) so it can be null.
     private final Double gaugeHeightFeet;
     private final Double waterTemperatureF;
 
+    // When the gauge took the measurement (local time)
     private final LocalDateTime measuredAt;
+    // Where the data came from, e.g. "USGS", and a link to that gauge's page
     private final String source;
     private final String sourceUrl;
 
@@ -44,6 +47,9 @@ public class GaugeReading {
         this.sourceUrl = sourceUrl;
     }
 
+    // ----- Getters -----
+    // Optional values return Optional so callers have to handle "not measured".
+
     public double getFlowCfs() {
         return flowCfs;
     }
@@ -73,6 +79,7 @@ public class GaugeReading {
         return sourceUrl;
     }
 
+    /** Prints this reading to the console, skipping values the gauge didn't measure. */
     public void displayGaugeReading() {
         System.out.println("Measured at: " + measuredAt);
         System.out.println("Flow: " + flowCfs + " CFS");

@@ -18,6 +18,7 @@ public class Stream {
     // USGS monitoring location ID, used to look up the stream's flow gauge
     private String usgsGaugeId;
 
+    // Every reading fetched for this stream while the app has been running
     private ArrayList<GaugeReading> readings;
 
     public Stream(String name, String city, String state, String usgsGaugeId ) {
@@ -29,6 +30,7 @@ public class Stream {
         this.readings = new ArrayList<>();
     }
 
+    // Shared check used by the constructor and setName
     private static void requireName(String name) {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Stream name is required");
@@ -44,6 +46,7 @@ public class Stream {
         if (reading == null) {
             throw new IllegalArgumentException("Reading is required");
         }
+        // Skip duplicates: same measurement time means it's the same reading
         for (GaugeReading existing : readings) {
             if (existing.getMeasuredAt().equals(reading.getMeasuredAt())) {
                 return false;
@@ -52,6 +55,8 @@ public class Stream {
         readings.add(reading);
         return true;
     }
+
+    // ----- Getters and setters -----
 
     public String getName(){
         return name;
@@ -86,6 +91,9 @@ public class Stream {
         this.usgsGaugeId = usgsGaugeId;
     }
 
+    // ----- Display and lookups -----
+
+    /** Prints the stream and its latest reading to the console. */
     public void displayStream() {
         System.out.println(name);
         System.out.println(city + ", " + state);
